@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public class ArgsParser {
     /**
-     * Regex pattern to check that is a key parameter and not a value.
+     * Regex pattern to check that is a key parameter (contains two characters: '-' and letter) and not a value.
      */
     private static final String KEY_PATTERN = "^-[a-zA-Z]$";
 
@@ -19,7 +19,7 @@ public class ArgsParser {
     private static final Args[] mandatoryArgs = {Args.ROOT, Args.SEARCH_PATTERN, Args.OUTPUT};
 
     /**
-     * Optional keys.
+     * Optional keys. Only one key allowed.
      */
     private static final Args[] optionalArgs = {Args.MASK_SEARCH, Args.FULL_NAME_SEARCH, Args.REGEX_SEARCH};
 
@@ -78,9 +78,6 @@ public class ArgsParser {
                 }
                 isOptionPresent = true;
             }
-        }
-        if (!isOptionPresent) {
-            throw new IllegalArgumentException("Error: missing search options");
         }
     }
 

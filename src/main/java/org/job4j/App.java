@@ -2,6 +2,7 @@ package org.job4j;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +30,16 @@ public class App {
         try {
             searchResult = Search.fileSearch(parsedArgs);
         } catch (IOException e) {
-            System.out.println("File read error");
+            System.out.println("Error: can`t read files");
             e.printStackTrace();
         }
-        //TODO Search result processing
+        searchResult.forEach(System.out::println);
+        try {
+            FileOutput.write(searchResult, Paths.get(parsedArgs.get(Args.OUTPUT)));
+        } catch (IOException e) {
+            System.out.println("Error: can`t write file");
+            e.printStackTrace();
+        }
     }
 
     private static void exitWithHelp() {

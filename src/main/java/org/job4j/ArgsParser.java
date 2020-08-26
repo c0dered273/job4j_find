@@ -34,8 +34,8 @@ public class ArgsParser {
         Args emptyArg = null;
         for (String strArg : strArgs) {
             m = p.matcher(strArg);
-            Args arg = getArgFromString(strArg);
             if (m.matches()) {
+                Args arg = getArgFromString(strArg);
                 if (arg == null) {
                     throw new IllegalArgumentException(String.format(
                             "Error: unknown parameter: %s", strArg));

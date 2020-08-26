@@ -53,4 +53,20 @@ public class ArgsParserTest {
         String[] args = {"-d", "/test/path", "-m", "-r","-n", "*.txt"};
         ArgsParser.parse(args);
     }
+
+    @Test
+    public void whenTooManyOptions() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Error: to many options");
+        String[] args = {"-d", "/test/path", "-m", "-r","-n", "*.txt", "-o", "output.txt"};
+        ArgsParser.parse(args);
+    }
+
+    @Test
+    public void whenMissingOptions() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Error: missing search options");
+        String[] args = {"-d", "/test/path", "-n", "*.txt", "-o", "output.txt"};
+        ArgsParser.parse(args);
+    }
 }

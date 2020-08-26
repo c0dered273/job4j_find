@@ -14,9 +14,14 @@ public class ArgsParser {
     private static final String KEY_PATTERN = "^-[a-zA-Z]$";
 
     /**
-     * Mandatory key parameters.
+     * Mandatory keys.
      */
     private static final Args[] mandatoryArgs = {Args.ROOT, Args.SEARCH_PATTERN, Args.OUTPUT};
+
+    /**
+     * Optional keys.
+     */
+    private static final Args[] optionalArgs = {Args.MASK_SEARCH, Args.FULL_NAME_SEARCH, Args.REGEX_SEARCH};
 
     /**
      * Method gets arguments to map or throws exception with error message
@@ -51,6 +56,7 @@ public class ArgsParser {
             }
         }
         checkMandatory(result);
+        checkOptions(result);
         return result;
     }
 
@@ -60,6 +66,21 @@ public class ArgsParser {
                 throw new IllegalArgumentException(String.format(
                         "Error: not found mandatory parameter: %s", mandatory.getValue()));
             }
+        }
+    }
+
+    private static void checkOptions(Map<Args, String> args) throws IllegalArgumentException {
+        boolean isOptionPresent = false;
+        for (Args option : optionalArgs) {
+            if (args.containsKey(option)) {
+                if (isOptionPresent) {
+                    throw new IllegalArgumentException("Error: to many search options");
+                }
+                isOptionPresent = true;
+            }
+        }
+        if (!isOptionPresent) {
+            throw new IllegalArgumentException("Error: missing search options");
         }
     }
 

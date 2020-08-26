@@ -24,6 +24,11 @@ public class ArgsParser {
     ));
 
     /**
+     * Mandatory key parameters.
+     */
+    private static final String[] mandArgs = {"-d", "-n", "-o"};
+
+    /**
      * Method gets arguments to map or throws exception with error message
      * @param args command line arguments
      * @return HashMap with result
@@ -41,7 +46,8 @@ public class ArgsParser {
             m = p.matcher(arg);
             if (m.matches()) {
                 if (!validArgs.contains(arg)) {
-                    throw new IllegalArgumentException(String.format("Error: unknown parameter: %s", arg));
+                    throw new IllegalArgumentException(String.format(
+                            "Error: unknown parameter: %s", arg));
                 }
                 result.put(arg, "");
                 emptyArg = arg;
@@ -49,9 +55,20 @@ public class ArgsParser {
                 result.put(emptyArg, arg);
                 emptyArg = null;
             } else {
-                throw new IllegalArgumentException(String.format("Error: invalid parameter: %s", arg));
+                throw new IllegalArgumentException(String.format(
+                        "Error: invalid parameter: %s", arg));
             }
         }
+        checkMandatory(result);
         return result;
+    }
+
+    private static void checkMandatory(Map<String, String> args) throws IllegalArgumentException {
+        for (String mandatory : mandArgs) {
+            if (!args.containsKey(mandatory) || args.get(mandatory).isEmpty()) {
+                throw new IllegalArgumentException(String.format(
+                        "Error: not found mandatory parameter: %s", mandatory));
+            }
+        }
     }
 }

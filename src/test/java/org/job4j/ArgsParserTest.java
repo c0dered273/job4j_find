@@ -44,4 +44,13 @@ public class ArgsParserTest {
         String[] args = {"-d", "/test/path", un};
         ArgsParser.parse(args);
     }
+
+    @Test
+    public void whenAbsentMandatoryParameter() {
+        String un = "-o";
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Error: not found mandatory parameter: " + un);
+        String[] args = {"-d", "/test/path", "-m", "-r","-n", "*.txt"};
+        ArgsParser.parse(args);
+    }
 }

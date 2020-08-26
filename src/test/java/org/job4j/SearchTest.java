@@ -33,6 +33,17 @@ public class SearchTest {
     }
 
     @Test
+    public void whenSearchRegExp() throws IOException {
+        Map<Args, String> args = new HashMap<>();
+        args.put(Args.ROOT, temporaryFolder.getRoot().toString());
+        args.put(Args.SEARCH_PATTERN, "^2");
+        args.put(Args.OUTPUT, output.getPath());
+        List<Path> result = Search.fileSearch(args);
+        List<Path> expect = Collections.singletonList(file2.toPath());
+        assertThat(result, is(expect));
+    }
+
+    @Test
     public void whenSearchFullName() throws IOException {
         Map<Args, String> args = new HashMap<>();
         args.put(Args.ROOT, temporaryFolder.getRoot().toString());
@@ -51,19 +62,13 @@ public class SearchTest {
         args.put(Args.MASK_SEARCH, "");
         args.put(Args.OUTPUT, output.getPath());
         List<Path> result = Search.fileSearch(args);
-        List<Path> expect = Arrays.asList(file1.toPath(), file4.toPath());
-        assertThat(result, is(expect));
-    }
-
-    @Test
-    public void whenSearchRegExp() throws IOException {
-        Map<Args, String> args = new HashMap<>();
-        args.put(Args.ROOT, temporaryFolder.getRoot().toString());
-        args.put(Args.SEARCH_PATTERN, "^2");
-        args.put(Args.REGEX_SEARCH, "");
-        args.put(Args.OUTPUT, output.getPath());
-        List<Path> result = Search.fileSearch(args);
-        List<Path> expect = Collections.singletonList(file2.toPath());
+        List<Path> expect;
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("linux")) {
+            expect = Arrays.asList(file4.toPath(), file1.toPath());
+        } else {
+            expect = Arrays.asList(file1.toPath(), file4.toPath());
+        }
         assertThat(result, is(expect));
     }
 }

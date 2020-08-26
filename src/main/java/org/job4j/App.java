@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Simple cli file search util
+ * Args - contains program parameters.
  */
 
 public class App {

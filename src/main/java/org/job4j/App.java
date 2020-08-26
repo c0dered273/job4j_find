@@ -6,21 +6,18 @@ import java.util.Map;
  *
  */
 
-public class App
-{
+public class App {
+    static final String MAIN_HELP_FILENAME = "main_help.txt";
+
     public static void main(String[] args) {
-        for (String arg : args) {
-            System.out.println(arg);
+        Map<String, String> parsedArgs = null;
+        try {
+            parsedArgs = ArgsParser.parse(args);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            HelpViewer.showConsoleHelp(MAIN_HELP_FILENAME);
+            System.exit(64);
         }
-//        ArgsParser argsParser = new ArgsParser(args);
-//        Map<String, String> parsedArgs;
-//        try {
-//            parsedArgs = argsParser.getArgs();
-//        } catch (IllegalArgumentException e) {
-//            System.out.println(e.getMessage());
-//            HelpViewer.showConsoleHelp();
-//            System.exit(64);
-//        }
-//        System.out.println(argsParser.getArgs());
+        parsedArgs.forEach((key, value) -> System.out.println(key + " : " + value));
     }
 }

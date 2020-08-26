@@ -16,13 +16,12 @@ public class ArgsParserTest {
 
     @Test
     public void whenParseValidArgs() {
-        String[] args = {"-d", "/test/path", "-o", "filename.log", "-m", "-r", "-n", "*.txt"};
+        String[] args = {"-d", "/test/path", "-o", "filename.log", "-m", "-n", "*.txt"};
         Map<Args, String> result = ArgsParser.parse(args);
         Map<Args, String> expect = new HashMap<>();
         expect.put(Args.ROOT, "/test/path");
         expect.put(Args.OUTPUT, "filename.log");
         expect.put(Args.MASK_SEARCH, "");
-        expect.put(Args.REGEX_SEARCH, "");
         expect.put(Args.SEARCH_PATTERN, "*.txt");
         assertThat(result, is(expect));
     }
@@ -57,7 +56,7 @@ public class ArgsParserTest {
     @Test
     public void whenTooManyOptions() {
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Error: to many options");
+        exception.expectMessage("Error: to many search options");
         String[] args = {"-d", "/test/path", "-m", "-r","-n", "*.txt", "-o", "output.txt"};
         ArgsParser.parse(args);
     }

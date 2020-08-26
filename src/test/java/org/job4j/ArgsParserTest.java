@@ -16,14 +16,14 @@ public class ArgsParserTest {
 
     @Test
     public void whenParseValidArgs() {
-        String[] args = {"-d", "/test/path", "-o", "filename.log", "-m", "-r","-n", "*.txt"};
-        Map<String, String> result = ArgsParser.parse(args);
-        Map<String, String> expect = new HashMap<>();
-        expect.put("-d", "/test/path");
-        expect.put("-o", "filename.log");
-        expect.put("-m", "");
-        expect.put("-r", "");
-        expect.put("-n", "*.txt");
+        String[] args = {"-d", "/test/path", "-o", "filename.log", "-m", "-r", "-n", "*.txt"};
+        Map<Args, String> result = ArgsParser.parse(args);
+        Map<Args, String> expect = new HashMap<>();
+        expect.put(Args.ROOT, "/test/path");
+        expect.put(Args.OUTPUT, "filename.log");
+        expect.put(Args.MASK_SEARCH, "");
+        expect.put(Args.REGEX_SEARCH, "");
+        expect.put(Args.SEARCH_PATTERN, "*.txt");
         assertThat(result, is(expect));
     }
 

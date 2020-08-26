@@ -10,7 +10,7 @@ public class App {
     static final String MAIN_HELP_FILENAME = "main_help.txt";
 
     public static void main(String[] args) {
-        Map<String, String> parsedArgs = null;
+        Map<Args, String> parsedArgs = null;
         try {
             parsedArgs = ArgsParser.parse(args);
         } catch (IllegalArgumentException e) {

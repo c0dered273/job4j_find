@@ -24,26 +24,40 @@ public class Search {
         Path path = Paths.get(args.get(Args.ROOT));
         String searchString = args.get(Args.SEARCH_PATTERN);
         Predicate<Path> searchPredicate;
-        if (args.containsKey(Args.MASK_SEARCH)) {
-            searchPredicate = maskSearch(searchString);
+        if (args.containsKey(Args.REGEX_SEARCH)) {
+            searchPredicate = regexSearch(searchString);
         } else if (args.containsKey(Args.FULL_NAME_SEARCH)) {
             searchPredicate = fullNameSearch(searchString);
         } else {
-            searchPredicate = regexSearch(searchString); //Default search with empty parameters
+            searchPredicate = maskSearch(searchString); //Default search with empty parameters
         }
         FileSearcher searcher = new FileSearcher(searchPredicate);
         Files.walkFileTree(path, searcher);
         return searcher.getSearchResult();
     }
 
+    private static Predicate<Path> maskSearch(String searchString) {
+        int dotIndex = searchString.indexOf('.');
+        String name = searchString.substring(0, dotIndex);
+        String ext = searchString.substring(dotIndex + 1);
+        Predicate<Path> rsl;
+        if (name.equals("*")) {
+            rsl = p -> p.getFileName().toString().endsWith(ext);
+        } else if (ext.contains("*")) {
+            rsl = p -> {
+                String fileName = p.getFileName().toString();
+                String clearName = fileName.substring(0, fileName.indexOf('.'));
+                return clearName.endsWith(name);
+            };
+        } else {
+            rsl = p -> p.getFileName().toString().equals(searchString);
+        }
+        return rsl;
+    }
+
     private static Predicate<Path> regexSearch(String searchString) {
         Pattern pattern = Pattern.compile(searchString);
         return p -> pattern.matcher(p.getFileName().toString()).find();
-    }
-
-    private static Predicate<Path> maskSearch(String searchString) {
-        String fileEx = searchString.substring(searchString.lastIndexOf('.'));
-        return p -> p.getFileName().toString().endsWith(fileEx);
     }
 
     private static Predicate<Path> fullNameSearch(String searchString) {
